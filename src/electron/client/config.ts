@@ -106,7 +106,7 @@ function parseCliConfig(): Partial<ConfigJson> {
     if (args.pool) cliConfig.pool = args.pool as string
     if (args.rig) cliConfig.rig = args.rig as string
     if (args.wallet) cliConfig.wallet = args.wallet as string
-    if (args.port) cliConfig.port = Number(args.wallet)
+    if (args.port) cliConfig.port = Number(args.port)
 
     return cliConfig
 }
