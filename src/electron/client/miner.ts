@@ -151,7 +151,7 @@ class Miner extends EventEmitter {
         this.ref ? this.ref.kill() : this.run()
     }
 
-    protected run(): void {
+    run(): void {
         // once stopped, calling start() followed by setTarget() will start the mining loop again
         if (this.stopped) {
             return undefined

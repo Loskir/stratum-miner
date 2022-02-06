@@ -1,4 +1,5 @@
 import { writeFile } from 'fs'
+import { createServer } from 'http'
 import { resolve } from 'path'
 import readConfig from './config'
 import log from './logger'
@@ -50,18 +51,22 @@ void (async function main() {
     TonPoolClient.on('submit', (id) => {
         const stat = stats.get(id)
         if (stat) stat.accepted++
+        log.info('accepted share')
     })
     TonPoolClient.on('submitDuplicate', (id) => {
         const stat = stats.get(id)
         if (stat) stat.duplicate++
+        log.info('duplicate share')
     })
     TonPoolClient.on('submitInvalid', (id) => {
         const stat = stats.get(id)
         if (stat) stat.invalid++
+        log.info('invalid share')
     })
     TonPoolClient.on('submitStale', (id) => {
         const stat = stats.get(id)
         if (stat) stat.stale++
+        log.info('stale share')
     })
 
     setInterval((): void => {
@@ -111,5 +116,17 @@ void (async function main() {
 
         writeStats()
         setInterval(() => writeStats(), 10000).unref()
+    }
+
+    if (config.port) {
+        createServer((req, res) => {
+            if (req.url == '/pause') {
+                TonPoolClient.pause()
+            } else if (req.url === '/resume') {
+                TonPoolClient.resume()
+            }
+            res.end()
+        }).listen(config.port)
+        log.info(`Starting http server on port ${config.port}`)
     }
 })().catch((error: Error) => log.error(`bin main error: ${error.message}`))

@@ -54,6 +54,7 @@ class TonPoolClient extends EventEmitter {
 
     private client?: Client
     private miners: Miner[] = []
+    private paused = false
 
     constructor() {
         super()
@@ -116,7 +117,9 @@ class TonPoolClient extends EventEmitter {
                 reconnecting = false
                 log.info('connection established')
 
-                this.miners.forEach((miner) => miner.start())
+                if (!this.paused) {
+                    this.miners.forEach((miner) => miner.start())
+                }
 
                 this.state = this.CONNECTED
                 this.emit('connect')
@@ -128,7 +131,9 @@ class TonPoolClient extends EventEmitter {
                     this.state = this.MINING
 
                     // set_target can come before 'open' event
-                    this.miners.forEach((miner) => miner.start())
+                    if (!this.paused) {
+                        this.miners.forEach((miner) => miner.start())
+                    }
                     this.miners.forEach((miner) => miner.setTarget(...message.params))
                 }
 
@@ -200,6 +205,19 @@ class TonPoolClient extends EventEmitter {
                 this.miners = []
             }
         )
+    }
+
+    pause() {
+        log.info('pausing client...')
+        this.miners.forEach((miner) => miner.stop())
+        this.paused = true
+    }
+
+    resume() {
+        log.info('resuming client...')
+        this.miners.forEach((miner) => miner.start())
+        this.miners.forEach((miner) => miner.run())
+        this.paused = false
     }
 }
 

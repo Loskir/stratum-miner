@@ -13,6 +13,7 @@ export interface ConfigJson {
     pool?: string
     rig?: string
     wallet?: string
+    port?: number | null
 }
 
 export interface Config extends Required<ConfigJson> {
@@ -61,6 +62,7 @@ export default function readConfig(): Config {
         rig: 'default',
         version: '2.1.1',
         wallet: '',
+        port: null,
         ...jsonConfig,
         ...cliConfig
     }
@@ -82,7 +84,8 @@ function parseCliConfig(): Partial<ConfigJson> {
             { name: 'iterations' },
             { name: 'pool', alias: 'p' },
             { name: 'rig', alias: 'r' },
-            { name: 'wallet', alias: 'w' }
+            { name: 'wallet', alias: 'w' },
+            { name: 'port' },
         ],
         {
             // see https://github.com/75lb/command-line-args/issues/103
@@ -103,6 +106,7 @@ function parseCliConfig(): Partial<ConfigJson> {
     if (args.pool) cliConfig.pool = args.pool as string
     if (args.rig) cliConfig.rig = args.rig as string
     if (args.wallet) cliConfig.wallet = args.wallet as string
+    if (args.port) cliConfig.port = Number(args.wallet)
 
     return cliConfig
 }
