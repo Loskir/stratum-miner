@@ -70,9 +70,9 @@ jobs:
                   files: >
                       TON-Stratum-Miner-${{ steps.get_version.outputs.version-without-v }}-linux-headless.tar.gz
                       TON-Stratum-Miner-${{ steps.get_version.outputs.version-without-v }}-win-headless.zip
-                      TON_Stratum_Miner_HiveOS-${{ steps.get_version.outputs.version-without-v }}.tar.gz
-                      TON_Stratum_Miner_msOS-${{ steps.get_version.outputs.version-without-v }}.tar.gz
-                      TON_Stratum_Miner_raveOS-${{ steps.get_version.outputs.version-without-v }}.zip
+                  # TON_Stratum_Miner_HiveOS-${{ steps.get_version.outputs.version-without-v }}.tar.gz
+                  # TON_Stratum_Miner_msOS-${{ steps.get_version.outputs.version-without-v }}.tar.gz
+                  # TON_Stratum_Miner_raveOS-${{ steps.get_version.outputs.version-without-v }}.zip
 
     # release:
     #     runs-on: ${{ matrix.os }}
